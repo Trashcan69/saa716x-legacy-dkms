@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+PACKAGE_NAME := saa716x-legacy-dkms
+UPSTREAM_VERSION := $(shell dpkg-parsechangelog -S Version | sed 's/-[^-]*$$//')
+DKMS_SOURCE_DIR := debian/saa716x-legacy-dkms/usr/src/$(PACKAGE_NAME)-$(UPSTREAM_VERSION)
+
+%:
+	dh $@ --with dkms
+
+override_dh_dkms:
+	dh_dkms -V
+	mkdir -p $(DKMS_SOURCE_DIR)
+	cp -a src/drivers/media/pci/saa716x/. $(DKMS_SOURCE_DIR)/
